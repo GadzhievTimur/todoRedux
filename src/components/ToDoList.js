@@ -1,16 +1,15 @@
 import { Grid, List } from "@mui/material";
-import React from "react";
 import { useSelector } from "react-redux";
 import { ToDoFilters } from "./ToDoFilters";
 import { ToDoItem } from "./ToDoItem";
 
 export const ToDoList = () => {
-  let todo = useSelector((state) => state);
+  const filteredTodos = useSelector((state) => state.filteredTodos);
   return (
     <Grid>
       <List>
-        {todo.map((todos) => {
-          return <ToDoItem key={todos.id} todos={todos} />;
+        {filteredTodos.map((todo) => {
+          return <ToDoItem key={todo.id} todo={todo} />;
         })}
       </List>
       <Grid>

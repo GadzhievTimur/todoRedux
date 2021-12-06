@@ -1,1 +1,5 @@
-export let todo = [];
+export const initialState = {
+    todos: [],
+    filteredTodos: [],
+    filter: 'all'
+};

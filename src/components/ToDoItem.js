@@ -8,30 +8,49 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { deleteTodo, editTodo } from "./redux/actions";
+import { deleteTodo, editTodo, checkTodo } from "./redux/actions";
 
-export const ToDoItem = ({ todos }) => {
+export const ToDoItem = ({ todo }) => {
   const [tempVal, setTempVal] = useState("");
   const [editable, setEditable] = useState(false);
   const dispatch = useDispatch();
+  const styles = {
+    input: {
+      textAlign: "center",
+      width: "100%",
+    },
+    root: {
+      textAlign: "center",
+      width: "100%",
+    },
+    checkbox: {
+      ml: 2.5,
+    },
+    delBtn: {
+      ml: -2.6,
+    },
+  };
+
   return (
     <Grid>
-      <ListItem style={{ justifyContent: "center" }}>
+      <ListItem sx={styles.root}>
         <Checkbox
+          checked={todo.completed}
+          sx={styles.checkbox}
           onClick={() => {
-            todos.completed = !todos.completed;
+            dispatch(checkTodo(todo.id));
           }}
         />
         {editable ? (
           <Input
-            style={{ width: "284px" }}
+            sx={styles.input}
             autoFocus
             value={tempVal}
             onChange={(e) => setTempVal(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 if (tempVal.trim()) {
-                  dispatch(editTodo({ ...todos, title: tempVal }));
+                  dispatch(editTodo({ ...todo, title: tempVal }));
                   setEditable(false);
                   setTempVal("");
                 } else {
@@ -39,23 +58,32 @@ export const ToDoItem = ({ todos }) => {
                 }
               }
             }}
-            placeholder={todos.title}
+            placeholder={todo.title}
           />
         ) : (
-          <Typography className={`$task-{todos.completed}`}
-            style={{ textAlign: "center", width: "284px" }}
+          <Typography
+            sx={{
+              overflowWrap: "break-word",
+              minWidth: "70.75%",
+              maxWidth: "70.75%",
+            }}
             onDoubleClick={() => {
               if (editable) {
-                setTempVal(todos.title);
+                setTempVal(todo.title);
               }
               setEditable(true);
             }}
           >
-            {todos.title}
+            {todo.title}
           </Typography>
         )}
 
-        <Button onClick={() => dispatch(deleteTodo(todos.id))}> X </Button>
+        <Button
+          sx={styles.delBtn}
+          onClick={() => dispatch(deleteTodo(todo.id))}
+        >
+          X
+        </Button>
       </ListItem>
     </Grid>
   );

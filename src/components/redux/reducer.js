@@ -3,26 +3,45 @@ import {
   DELETE_COMPLETED_TODO,
   DELETE_TODO,
   EDIT_TODO,
-  SORT_COMPLETED_TODO,
-  SORT_INCOMPLETED_TODO,
+  SHOW_ALL_TODOS,
+  SHOW_COMPLETED_TODOS,
+  SHOW_INCOMPLETED_TODOS,
+  CHECK_TODO,
 } from "./actions";
-import { todo } from "./states";
+import { initialState } from "./states";
 
-export const reducer = (state = todo, action) => {
-  let newTodo;
+export const reducer = (state = initialState, action) => {
+  let newTodo = [...state.todos];
   switch (action.type) {
     case ADD_TODO:
-      newTodo = [...state];
-      newTodo.push(action.payload);
-      return newTodo;
+      return {
+        ...state,
+        todos: [...newTodo, action.payload],
+        filteredTodos: [...newTodo, action.payload],
+      };
 
     case DELETE_TODO:
-      newTodo = [...state];
-      newTodo = newTodo.filter((todos) => todos.id !== action.payload);
-      return newTodo;
+      return {
+        ...state,
+        todos: newTodo.filter((todos) => todos.id !== action.payload),
+        filteredTodos: newTodo.filter((todos) => todos.id !== action.payload),
+      };
+
+    case CHECK_TODO:
+      const checkTodo = newTodo.map((todo) => {
+        if (todo.id === action.payload) {
+          return { ...todo, completed: !todo.completed };
+        }
+        return todo;
+      });
+
+      return {
+        ...state,
+        todos: checkTodo,
+        filteredTodos: checkTodo,
+      };
 
     case EDIT_TODO:
-      newTodo = [...state];
       let index = -1;
       for (let i = 0; i < newTodo.length; i++) {
         index++;
@@ -32,25 +51,42 @@ export const reducer = (state = todo, action) => {
       }
       if (index !== -1) {
         newTodo[index] = action.payload;
-        return newTodo;
+        return {
+          ...state,
+          todos: [...newTodo],
+          filteredTodos: [...newTodo],
+        };
       }
       break;
 
-    case SORT_COMPLETED_TODO:
-      newTodo = [...state];
-      newTodo = newTodo.sort((todo) => todo.completed === true);
-      return newTodo;
-
-
-    case SORT_INCOMPLETED_TODO:
-      newTodo = [...state];
-      newTodo = newTodo.sort((todo) => todo.completed === false);
-      return 
-
     case DELETE_COMPLETED_TODO:
-      newTodo = [...state];
-      newTodo = newTodo.filter((todo) => todo.completed === false);
-      return newTodo;
+      return {
+        ...state,
+        todos: newTodo.filter((todo) => todo.completed === false),
+        filteredTodos: newTodo.filter((todo) => todo.completed === false),
+      };
+
+    case SHOW_ALL_TODOS:
+      return {
+        ...state,
+        todos: state.todos,
+        filteredTodos: state.todos,
+        filter: "all",
+      };
+
+    case SHOW_COMPLETED_TODOS:
+      return {
+        ...state,
+        filteredTodos: state.todos.filter((todo) => todo.completed === true),
+        filter: "completed",
+      };
+
+    case SHOW_INCOMPLETED_TODOS:
+      return {
+        ...state,
+        filteredTodos: newTodo.filter((todo) => todo.completed === false),
+        filter: "incompleted",
+      };
 
     default:
       return state;

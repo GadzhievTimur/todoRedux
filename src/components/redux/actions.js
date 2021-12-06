@@ -2,8 +2,10 @@ export const ADD_TODO = "ADD_TODO";
 export const DELETE_TODO = "DELETE_TODO";
 export const EDIT_TODO = "EDIT_TODO";
 export const DELETE_COMPLETED_TODO = "DELETE_COMPLETED_TODO";
-export const SORT_COMPLETED_TODO = "SORT_COMPLETED_TODO";
-export const SORT_INCOMPLETED_TODO = "SORT_INCOMPLETED_TODO"
+export const SHOW_ALL_TODOS = "SHOW_ALL_TODOS";
+export const SHOW_COMPLETED_TODOS = "SHOW_COMPLETED_TODOS";
+export const SHOW_INCOMPLETED_TODOS = "SHOW_INCOMPLETED_TODOS";
+export const CHECK_TODO = "CHECK_TODO";
 
 export const addTodo = (todo) => {
   return {
@@ -19,10 +21,10 @@ export const deleteTodo = (todoId) => {
   };
 };
 
-export const editTodo = (todo) => {
+export const editTodo = (todoId) => {
   return {
     type: EDIT_TODO,
-    payload: todo,
+    payload: todoId,
   };
 };
 
@@ -33,16 +35,30 @@ export const deleteCompletedTodo = (todo) => {
   };
 };
 
-export const sortCompletedTodo = (todo) => {
+export const allFilter = (todoFilter) => {
   return {
-    type: SORT_COMPLETED_TODO,
-    payload: todo,
+    type: SHOW_ALL_TODOS,
+    payload: todoFilter,
   };
 };
 
-export const sortIncompletedTodo = (todo) => {
+export const completedFilter = (todoFilter) => {
   return {
-    type: SORT_INCOMPLETED_TODO,
-    payload: todo,
+    type: SHOW_COMPLETED_TODOS,
+    payload: todoFilter,
+  };
+};
+
+export const incompletedFilter = (todoFilter) => {
+  return {
+    type: SHOW_INCOMPLETED_TODOS,
+    payload: todoFilter,
+  };
+};
+
+export const checkTodo = (todoCheck) => {
+  return {
+    type: CHECK_TODO,
+    payload: todoCheck,
   };
 };

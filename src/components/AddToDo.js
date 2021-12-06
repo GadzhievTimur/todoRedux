@@ -4,9 +4,16 @@ import { useDispatch } from "react-redux";
 import { v4 } from "uuid";
 import { addTodo } from "./redux/actions";
 
+const styles = {
+  input: {
+    width: "70.5%",
+  },
+};
+
 export const AddTodo = () => {
   const [tempVal, setTempVal] = useState("");
-  let dispatch = useDispatch();
+  const dispatch = useDispatch();
+
   const handleSubmit = (e) => {
     if (tempVal.trim()) {
       if (e.keyCode === 13) {
@@ -15,11 +22,12 @@ export const AddTodo = () => {
       }
     }
   };
+
   return (
-    <Grid>
+    <Grid container justifyContent="center">
       <Input
-        style={{ width: "24%" }}
-        autoFocus
+      autoFocus
+        sx={styles.input}
         placeholder={"What do you wanna do?"}
         value={tempVal}
         onChange={(e) => setTempVal(e.target.value)}
